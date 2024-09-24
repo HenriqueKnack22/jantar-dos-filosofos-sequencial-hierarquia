@@ -1,3 +1,4 @@
+//concorente
 package main
 
 import (
@@ -20,27 +21,28 @@ var orderMutex sync.Mutex
 func diningProblem(p string, leftFork, rightFork *sync.Mutex) {
 	defer wg.Done()
 	fmt.Println(p, "esta sentado.")
-	// philosopher takes one second to seat.
+	// filosofos demoram 1seg para sentar.
 	time.Sleep(sleepTime)
 
-	// each philosopher is going to eat three times.
+	// cada filosofo vai comer 3x.
 	for i := hunger; i > 0; i-- {
 		fmt.Println(p, "esta com fome.")
-		// philosopher is picking up both the forks. it takes one second.
+		// esta pegando os garfos, demorando 1seg
 		time.Sleep(sleepTime)
-		// philosopher has picked up left fork. left fork is locked. no one can use it, unless it's unlocked
+		
+		// filosofo pegou o garfo esquerdo. garfo esquerdo travado. ninguem mais usa, ate ser desbloqueado.
 		leftFork.Lock()
 		fmt.Printf("\t%s pegou o garfo a sua esquerda.\n", p)
 
-		// philosopher has picked up right fork. right fork is locked. no one can use it, unless it's unlocked
+		// filosofo pegou o garfo direito. garfo direito travado. ninguem mais usa, ate ser desbloqueado.
 		rightFork.Lock()
 		fmt.Printf("\t%s pegou o garfo a sua direita.\n", p)
 
 		fmt.Println(p, "esta com os dois garfos e comendo.")
-		// philosopher starts eating. it takes him two seconds to eat.
+		// filosofo comeca a comer, 2seg para comer.
 		time.Sleep(eatTime)
 
-		// give the philosopher some time to think
+		// dar temo para o filosofo pensar
 		fmt.Println(p, "esta pensando.")
 		time.Sleep(thinkTime)
 
@@ -48,13 +50,13 @@ func diningProblem(p string, leftFork, rightFork *sync.Mutex) {
 		fmt.Printf("\t%s devolveu o garfo direito.\n", p)
 		leftFork.Unlock()
 		fmt.Printf("\t%s devolveu o garfo esquerdo.\n", p)
-		// philosopher takes one second to put down both the forks
+		// filosofo demora 1seg para botar os garfos na mesa 
 		time.Sleep(sleepTime)
 	}
 
-	// current philosopher is done eating
+	// filosofo atual comeu
 	fmt.Println(p, "esta satisfeito.")
-	// philosopher is leaving. takes one second
+	// filosofo saindo, demora 1seg
 	time.Sleep(sleepTime)
 	fmt.Println(p, "saiu da mesa.")
 	orderMutex.Lock()
@@ -71,13 +73,13 @@ func main() {
 	forkLeft := &sync.Mutex{}
 
 	for i := 0; i < len(philosophers); i++ {
-		// mutex for the right fork
+		// mutex para o garfo direito
 		forkRight := &sync.Mutex{}
 		go diningProblem(philosophers[i], forkLeft, forkRight)
 
 		forkLeft = forkRight
 
-		// Sleep for 5 seconds before starting the next philosopher
+		// dormir 5seg para o proximo filosofo
 		time.Sleep(5 * time.Second)
 	}
 

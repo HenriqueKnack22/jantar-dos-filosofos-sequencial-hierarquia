@@ -1,3 +1,3 @@
-module github.com/arnab333/golang-dining-philosophers-problem
+module github.com/HenriqueKnack22/jantar-dos-filosofos-hierarquia.git
 
-go 1.18
+go 1.23.1

@@ -17,3 +17,5 @@ go build main.go
 
 - Executar sem compilar: 
 go run main.go
+
+SOLUÇÃO SEQUENCIAL
